@@ -41,14 +41,14 @@ export class ContaReceberController {
     @Query('filter', ParseFindAllFilter)
     filter: IFindAllFilter | IFindAllFilter[],
   ): Promise<IResponse<ContaReceber[]>> {
-    const data = await this.contaReceberService.findAll(
+    const {data, count} = await this.contaReceberService.findAll(
       page,
       size,
       order,
       filter,
     );
 
-    return new HttpResponse<ContaReceber[]>(data);
+    return new HttpResponse<ContaReceber[]>(data, null, count);
   }
 
   @Get(':id')

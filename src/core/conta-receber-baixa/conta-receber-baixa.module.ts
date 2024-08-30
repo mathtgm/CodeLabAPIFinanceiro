@@ -9,15 +9,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { grpcClientConfig } from '../../config/grpc/grpc.config';
 import { ExportPdfService } from '../../shared/services/export-pdf.service';
 import { RmqClientService } from '../../shared/services/rmq-client.service';
-import { ContaReceberController } from './conta-receber.controller';
-import { ContaReceberService } from './conta-receber.service';
-import { ContaReceber } from './entities/conta-receber.entity';
+import { ContaReceberBaixaService } from './conta-receber-baixa.service';
+import { ContaReceberBaixa } from './entities/conta-receber-baixa.entity';
+import { ContaReceberBaixaController } from './conta-receber-baixa.controller';
+import { ContaReceber } from '../conta-receber/entities/conta-receber.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ContaReceber])],
-  controllers: [ContaReceberController],
+  imports: [TypeOrmModule.forFeature([ContaReceberBaixa, ContaReceber])],
+  controllers: [ContaReceberBaixaController],
   providers: [
-    ContaReceberService,
+    ContaReceberBaixaService,
     ExportPdfService,
     RmqClientService,
     {
@@ -40,4 +41,4 @@ import { ContaReceber } from './entities/conta-receber.entity';
     },
   ],
 })
-export class ContaReceberModule {}
+export class ContaReceberBaixaModule {}

@@ -25,10 +25,11 @@ import { ExportPdfService } from '../../shared/services/export-pdf.service';
 import { CreateContaReceberDto } from './dto/create-conta-receber.dto';
 import { UpdateContaReceberDto } from './dto/update-conta-receber.dto';
 import { ContaReceber } from './entities/conta-receber.entity';
+import { IResponse } from 'src/shared/interfaces/response.interface';
 
 @Injectable()
 export class ContaReceberService {
-  private readonly logger = new Logger(ContaReceberService.name);
+  private readonly logger = new Logger(ContaReceber.name);
 
   @Inject('MAIL_SERVICE')
   private readonly mailService: ClientProxy;
@@ -64,12 +65,11 @@ export class ContaReceberService {
     size: number,
     order: IFindAllOrder,
     filter?: IFindAllFilter | IFindAllFilter[],
-  ): Promise<ContaReceber[]> {
-    page--;
+  ): Promise<IResponse<ContaReceber[]>> {
 
     const where = handleFilter(filter);
 
-    return await this.repository.find({
+    const [data, count] = await this.repository.findAndCount({
       loadEagerRelations: false,
       order: {
         [order.column]: order.sort,
@@ -78,12 +78,17 @@ export class ContaReceberService {
       skip: size * page,
       take: size,
     });
+    
+    return {count, data, message: ''};
   }
 
   async findOne(id: number): Promise<ContaReceber> {
-    return await this.repository.findOne({
+    const data = await this.repository.findOne({
       where: { id: id },
     });
+
+    console.log(data.baixa);
+    return data;
   }
 
   async update(

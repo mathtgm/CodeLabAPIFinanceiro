@@ -18,7 +18,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseTransformInterceptor());
   app.useGlobalFilters(new ResponseExceptionsFilter());
 
-  app.enableCors(); // Add this line
+  app.enableCors();
 
   setupOpenApi(app);
 

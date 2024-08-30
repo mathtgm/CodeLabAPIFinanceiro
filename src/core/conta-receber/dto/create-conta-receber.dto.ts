@@ -1,8 +1,9 @@
-import { Type } from 'class-transformer';
-import { IsArray, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 import { EMensagem } from '../../../shared/enums/mensagem.enum';
-import { CreateContaReceberBaixaDto } from './create-conta-receber-baixa.dto';
-import { UpdateContaReceberBaixaDto } from './update-conta-receber-baixa.dto';
+import { ContaReceberBaixa } from 'src/core/conta-receber-baixa/entities/conta-receber-baixa.entity';
+import { CreateContaReceberBaixaDto } from 'src/core/conta-receber-baixa/dto/create-conta-receber-baixa.dto';
+import { UpdateContaReceberBaixaDto } from 'src/core/conta-receber-baixa/dto/update-conta-receber-baixa.dto';
+import { Type } from 'class-transformer';
 
 export class CreateContaReceberDto {
   @IsNotEmpty({ message: `idPessoa ${EMensagem.NaoPodeSerVazio}` })
@@ -20,7 +21,8 @@ export class CreateContaReceberDto {
   @IsNotEmpty({ message: `pago ${EMensagem.NaoPodeSerVazio}` })
   pago: boolean;
 
-  @IsArray({ message: `baixa ${EMensagem.TipoInvalido}` })
+  @IsNotEmpty({ message: `Baixa ${EMensagem.NaoPodeSerVazio}`})
   @Type(() => CreateContaReceberBaixaDto)
-  baixa: CreateContaReceberBaixaDto[] | UpdateContaReceberBaixaDto[];
+  baixa: CreateContaReceberBaixaDto[] | UpdateContaReceberBaixaDto;
+
 }

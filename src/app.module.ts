@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './config/database/database.module';
 import { ContaReceberModule } from './core/conta-receber/conta-receber.module';
 import { LoggerMiddleware } from './shared/middleware/logger.middleware';
+import { ContaReceberBaixaModule } from './core/conta-receber-baixa/conta-receber-baixa.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { LoggerMiddleware } from './shared/middleware/logger.middleware';
 
     DatabaseModule,
     ContaReceberModule,
+    ContaReceberBaixaModule
   ],
 })
 export class AppModule implements NestModule {

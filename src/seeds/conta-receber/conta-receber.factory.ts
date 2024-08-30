@@ -12,6 +12,6 @@ define(ContaReceber, () => {
   contaReceber.idUsuarioLancamento = 1;
   contaReceber.pago = false;
   contaReceber.baixa = [];
-
+  
   return new ContaReceber(contaReceber);
 });
