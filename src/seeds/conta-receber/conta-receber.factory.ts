@@ -11,7 +11,6 @@ define(ContaReceber, () => {
   contaReceber.valorTotal = faker.number.float({ min: 0, max: 1000 });
   contaReceber.idUsuarioLancamento = 1;
   contaReceber.pago = false;
-  contaReceber.baixa = [];
   
   return new ContaReceber(contaReceber);
 });

@@ -21,8 +21,4 @@ export class CreateContaReceberDto {
   @IsNotEmpty({ message: `pago ${EMensagem.NaoPodeSerVazio}` })
   pago: boolean;
 
-  @IsNotEmpty({ message: `Baixa ${EMensagem.NaoPodeSerVazio}`})
-  @Type(() => CreateContaReceberBaixaDto)
-  baixa: CreateContaReceberBaixaDto[] | UpdateContaReceberBaixaDto;
-
 }

@@ -33,14 +33,6 @@ export class ContaReceber {
   @Column({ nullable: false })
   pago: boolean;
 
-  @OneToMany(() => ContaReceberBaixa, (contaReceberBaixa) => contaReceberBaixa.contaReceber, {
-    eager: true,
-    onDelete: 'CASCADE',
-    cascade: ['insert', 'update'],
-    orphanedRowAction: 'delete',
-  })
-  baixa: ContaReceberBaixa[]
-
   constructor(
     createContaReceberDto: CreateContaReceberDto | UpdateContaReceberDto,
   ) {
