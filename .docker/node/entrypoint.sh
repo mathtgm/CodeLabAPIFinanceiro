@@ -4,4 +4,5 @@ echo "Container em execução"
 #rm -rf node_modules
 mkdir -p tmp/export
 npm install --legacy-peer-deps
+npm run migration:generate
 npm run start:dev
