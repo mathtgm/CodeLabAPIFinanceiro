@@ -87,7 +87,6 @@ export class ContaReceberService {
       where: { id: id },
     });
 
-    console.log(data.baixa);
     return data;
   }
 
