@@ -16,9 +16,11 @@ describe('ContaReceberController', () => {
           useValue: {
             create: jest.fn(),
             findAll: jest.fn(),
+            findAndCount: jest.fn(),
             findOne: jest.fn(),
             update: jest.fn(),
-            unactivate: jest.fn(),
+            exportPdf: jest.fn(),
+            delete: jest.fn()
           },
         },
       ],
@@ -33,21 +35,20 @@ describe('ContaReceberController', () => {
   });
 
   describe('create', () => {
-    it('criar um novo usuário', async () => {
+    it('criar uma nova conta a receber', async () => {
       const createContaReceberDto = {
-        nome: 'Nome Teste',
-        email: 'nome.teste@teste.com',
-        senha: '123456',
-        ativo: true,
-        admin: true,
-        permissao: [],
+        idPessoa: 1,
+        pessoa: 'Matheus Garcia',
+        idUsuarioLancamento: 1,
+        valorTotal: 10.00,
+        pago: false
       };
 
-      const mockContaReceber = Object.assign(createContaReceberDto, { id: 1 });
+      const mockContaReceber = Object.assign(createContaReceberDto, { id: 1, dataHora: new Date() });
 
       const spyServiceCreate = jest
         .spyOn(service, 'create')
-        .mockReturnValue(Promise.resolve(mockContaReceber) as any);
+        .mockReturnValue(Promise.resolve(mockContaReceber));
 
       const response = await controller.create(createContaReceberDto);
 
@@ -57,46 +58,65 @@ describe('ContaReceberController', () => {
     });
   });
 
+  describe('delete', () => {
+    it('exclui uma conta a receber', async () => {
+
+      const spyServiceDelete = jest
+        .spyOn(service, 'delete')
+        .mockReturnValue(Promise.resolve(false));
+
+      const response = await controller.delete(1);
+
+      expect(response.message).toEqual(EMensagem.DesativadoSucesso);
+      expect(response.data).toEqual(false);
+      expect(spyServiceDelete).toHaveBeenCalled();
+    });
+  });
+
   describe('findAll', () => {
-    it('obter uma listagem de usuários', async () => {
+    it('obter uma listagem contas a receber', async () => {
       const mockListaContaReceber = [
         {
           id: 1,
-          nome: 'Nome Teste',
-          email: 'nome.teste@teste.com',
-          senha: '123456',
-          ativo: true,
-          admin: true,
-          permissao: [],
+          idPessoa: 1,
+          pessoa: 'Matheus Garcia',
+          idUsuarioLancamento: 1,
+          valorTotal: 10.00,
+          dataHora: new Date(),
+          pago: false
         },
       ];
 
+      const mockOrderFilter = { column: 'id', sort: 'asc' as 'asc' };
+
+      const mockFilter = { column: '', value: '' }
+
       const spyServiceFindAll = jest
         .spyOn(service, 'findAll')
-        .mockReturnValue(Promise.resolve(mockListaContaReceber) as any);
+        .mockReturnValue(Promise.resolve({message: undefined, count: 1, data:mockListaContaReceber}));
 
-      const response = await controller.findAll(1, 10);
+      const response = await controller.findAll(1, 10, mockOrderFilter, mockFilter);
 
-      expect(response.message).toEqual(undefined);
+      expect(response.message).toEqual(null);
       expect(response.data).toEqual(mockListaContaReceber);
       expect(spyServiceFindAll).toHaveBeenCalled();
     });
   });
 
   describe('findOne', () => {
-    it('obter um usuário', async () => {
+    it('obter uma conta a receber', async () => {
       const mockContaReceber = {
         id: 1,
-        nome: 'Nome Teste',
-        email: 'nome.teste@teste.com',
-        senha: '123456',
-        ativo: true,
-        admin: true,
-        permissao: [],
+        idPessoa: 1,
+        pessoa: 'Matheus Garcia',
+        idUsuarioLancamento: 1,
+        valorTotal: 10.00,
+        dataHora: new Date(),
+        pago: false
       };
       const spyServiceFindOne = jest
         .spyOn(service, 'findOne')
-        .mockReturnValue(Promise.resolve(mockContaReceber) as any);
+        .mockReturnValue(Promise.resolve(mockContaReceber));
 
       const response = await controller.findOne(1);
 
@@ -108,19 +128,19 @@ describe('ContaReceberController', () => {
 
   describe('update', () => {
     it('alterar um usuário', async () => {
-      const mockContaReceber = {
+      const mockContaReceber ={
         id: 1,
-        nome: 'Nome Teste',
-        email: 'nome.teste@teste.com',
-        senha: '123456',
-        ativo: true,
-        admin: true,
-        permissao: [],
+        idPessoa: 1,
+        pessoa: 'Matheus Garcia',
+        idUsuarioLancamento: 1,
+        valorTotal: 10.00,
+        dataHora: new Date(),
+        pago: false
       };
 
       const spyServiceUpdate = jest
         .spyOn(service, 'update')
-        .mockReturnValue(Promise.resolve(mockContaReceber) as any);
+        .mockReturnValue(Promise.resolve(mockContaReceber));
 
       const response = await controller.update(1, mockContaReceber);
 
@@ -130,17 +150,24 @@ describe('ContaReceberController', () => {
     });
   });
 
-  describe('unactivate', () => {
-    it('desativar um usuário', async () => {
-      const spyServiceUpdate = jest
-        .spyOn(service, 'unactivate')
-        .mockReturnValue(Promise.resolve(false) as any);
+  describe('exportPdf', () => {
+    it('gerar uma rquivo PDF', async () => {
 
-      const response = await controller.unactivate(1);
+      const mockOrderFilter = { column: 'id', sort: 'asc' as 'asc' };
 
-      expect(response.message).toEqual(EMensagem.DesativadoSucesso);
-      expect(response.data).toEqual(false);
-      expect(spyServiceUpdate).toHaveBeenCalled();
+      const mockFilter = { column: '', value: '' }
+
+      const spyServiceExportPdf = jest
+        .spyOn(service, 'exportPdf')
+        .mockReturnValue(Promise.resolve(true));
+
+      const response = await controller.exportPdf(1, mockOrderFilter, mockFilter);
+
+      expect(response.message).toEqual(EMensagem.IniciadaGeracaoPDF);
+      expect(response.data).toEqual(true);
+      expect(spyServiceExportPdf).toHaveBeenCalled();
+      expect(spyServiceExportPdf).toHaveBeenCalledWith(1, mockOrderFilter, mockFilter)
     });
   });
+
 });

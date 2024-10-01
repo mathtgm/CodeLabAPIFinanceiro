@@ -30,7 +30,7 @@ export class ContaReceberBaixa {
   @CreateDateColumn()
   dataHora: Date;
 
-  @ManyToOne(() => ContaReceber, (contaReceber) => contaReceber.id)
+  @ManyToOne(() => ContaReceber, (contaReceber) => contaReceber.id, { onDelete: 'CASCADE' })
   @JoinColumn({
     name: 'idContaReceber',
     foreignKeyConstraintName: 'fk_conta-receber-baixa',
